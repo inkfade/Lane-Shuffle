@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private bool isSwitchingLane = false;
     private Coroutine laneSwitchCoroutine;
 
-    private bool isAlive = false;
+    private bool isAlive = true;
 
     // The player will only collide with objects on their current lane/lanes. For example, if a dragged lane hasn't moved high enough when it passes over the player, we will ignore any collisions.
     private List<Lane> collideableLanes = new List<Lane>();
@@ -40,21 +40,18 @@ public class PlayerController : MonoBehaviour
         gameController = GetComponent<GameController>();
         laneManager = GetComponent<LaneManager>();
         trackObjectManager = GetComponent<TrackObjectManager>();
+
+        playerObject = Instantiate(playerPrefab);
+        playerObject.GetComponent<PlayerCollisions>().playerController = this;
     }
 
 
-    public void SpawnPlayer()
+    private void Start()
     {
-        playerObject = Instantiate(playerPrefab);
-        playerObject.GetComponent<PlayerCollisions>().playerController = this;
-
         currentLane = laneManager.GetLane(1);
-        collideableLanes = new List<Lane> { currentLane };
+        collideableLanes.Add(currentLane);
         playerObject.transform.SetParent(currentLane.transform, false);
         playerObject.transform.localPosition = playerPositionOffset;
-
-        isAlive = true;
-        laneSwitchBuffer = 0;
     }
 
 

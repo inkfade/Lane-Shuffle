@@ -10,6 +10,8 @@ ModelImporter:
     100008: LaserWall
     100010: SideWall
     100012: Shuffle
+    100014: Pillars
+    100016: Hoop
     400000: CenterWall
     400002: Coin
     400004: //RootNode
@@ -17,6 +19,8 @@ ModelImporter:
     400008: LaserWall
     400010: SideWall
     400012: Shuffle
+    400014: Pillars
+    400016: Hoop
     2100000: Material
     2100002: Material_001
     2100004: Material_002
@@ -27,18 +31,24 @@ ModelImporter:
     2300006: LaserWall
     2300008: SideWall
     2300010: Shuffle
+    2300012: Pillars
+    2300014: Hoop
     3300000: CenterWall
     3300002: Coin
     3300004: Lane
     3300006: LaserWall
     3300008: SideWall
     3300010: Shuffle
+    3300012: Pillars
+    3300014: Hoop
     4300000: Coin
     4300002: LaserWall
     4300004: SideWall
     4300006: CenterWall
     4300008: Lane
     4300010: Shuffle
+    4300012: Pillars
+    4300014: Hoop
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}

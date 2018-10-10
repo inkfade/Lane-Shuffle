@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(TrackObjectManager), typeof(PlayerController), typeof(MouseAndTouchManager))]
+[RequireComponent(typeof(TrackObjectManager), typeof(MouseAndTouchManager))]
 public class GameController : MonoBehaviour
 {
     private TrackObjectManager trackObjectManager;
-    private PlayerController playerController;
     private MouseAndTouchManager mouseAndTouchManager;
 
     [SerializeField]
@@ -16,6 +16,8 @@ public class GameController : MonoBehaviour
     private ScoreText inGameScoreText;
     [SerializeField]
     private Text finalScoreText;
+    [SerializeField]
+    private GameObject movementButtons;
 
 
     [SerializeField]
@@ -24,21 +26,41 @@ public class GameController : MonoBehaviour
     private float finalTrackSpeed = 2f;
     [SerializeField]
     private float trackAccelerationRate = 1f;
-    private float trackSpeed = 2f;
+    private float trackSpeed = 0f;
 
     [SerializeField]
     private float gameOverDelay = 1f;
 
     private int score = 0;
-    private bool gameIsInProgress = false;
+    private bool gameIsInProgress = true;
     public bool GameIsInProgress { get { return gameIsInProgress; } }
 
 
     private void Awake()
     {
         trackObjectManager = GetComponent<TrackObjectManager>();
-        playerController = GetComponent<PlayerController>();
         mouseAndTouchManager = GetComponent<MouseAndTouchManager>();
+
+        trackSpeed = initialTrackSpeed;
+    }
+
+
+    private void Start()
+    {
+        gameOverPanel.SetActive(false);
+        inGameScoreText.UpdateScore(0);
+    }
+
+
+    private void Update()
+    {
+        // accelerate the track
+        if (gameIsInProgress)
+        {
+            trackSpeed = Mathf.Lerp(trackSpeed, finalTrackSpeed, Time.deltaTime * trackAccelerationRate);
+            trackObjectManager.TargetMoveSpeed = trackSpeed;
+            //Debug.Log(trackSpeed);
+        }
     }
 
 
@@ -50,35 +72,16 @@ public class GameController : MonoBehaviour
     }
 
 
-    private void Start()
-    {
-        StartGame();
-    }
-
-
-    // Start game
-    public void StartGame()
-    {
-        gameOverPanel.SetActive(false);
-        mouseAndTouchManager.SetInputEnabled(true);
-        trackObjectManager.InitializeTrack();
-        trackSpeed = initialTrackSpeed;
-        trackObjectManager.TargetMoveSpeed = trackSpeed;
-        playerController.SpawnPlayer();
-        score = 0;
-        inGameScoreText.UpdateScore(0);
-        gameIsInProgress = true;
-    }
-
-    // Game over
     public void GameOver()
     {
         trackObjectManager.TargetMoveSpeed = 0f;
         gameIsInProgress = false;
         mouseAndTouchManager.SetInputEnabled(false);
+        movementButtons.SetActive(false);
 
         StartCoroutine(GameOverCoroutine());
     }
+
 
     private IEnumerator GameOverCoroutine()
     {
@@ -104,18 +107,11 @@ public class GameController : MonoBehaviour
             finalScoreText.text = "Your score: " + score;
             PlayerPrefs.SetInt("Top Score", score);
         }
-
-
     }
 
-    private void Update()
+
+    public void ReloadScene()
     {
-        // accelerate the track
-        if (gameIsInProgress)
-        {
-            trackSpeed = Mathf.Lerp(trackSpeed, finalTrackSpeed, Time.deltaTime * trackAccelerationRate);
-            trackObjectManager.TargetMoveSpeed = trackSpeed;
-            //Debug.Log(trackSpeed);
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
