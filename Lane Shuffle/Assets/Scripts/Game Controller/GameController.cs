@@ -19,7 +19,6 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private GameObject movementButtons;
 
-
     [SerializeField]
     private float initialTrackSpeed = 1f;
     [SerializeField]
@@ -113,5 +112,11 @@ public class GameController : MonoBehaviour
     public void ReloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

@@ -16,7 +16,6 @@ public class DistanceScore : MonoBehaviour
     private int scorePerSection = 1;
 
     private float distanceUntilNextScoreIncrease;
-    private int score = 0;
 
     private void Awake()
     {
